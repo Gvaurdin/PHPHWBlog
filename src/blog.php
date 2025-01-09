@@ -130,8 +130,8 @@ function deletePost($id) : string
     if(!$postFound) {
         return errorHandle("Пост с указанным id не найден");
     }
-        file_put_contents($dbFile, json_encode($dbData, JSON_PRETTY_PRINT));
-        return "Пост успешно удален";
+    file_put_contents($dbFile, json_encode($dbData, JSON_PRETTY_PRINT));
+    return "Пост успешно удален";
 }
 
 function clearPosts() : string

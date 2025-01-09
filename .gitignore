@@ -1,0 +1,5 @@
+# игнорим папку с зависимостями composer
+/vendor/
+
+# игнорим файл установки composer
+composer-setup.php
