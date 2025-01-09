@@ -3,7 +3,7 @@
 function main(): string
 {
     $command = parseCommand();
-    if(in_array($command, ['readPost', 'searchPost']) && isset($_SERVER['argv'][2])){
+    if(in_array($command, ['readPost', 'searchPost','deletePost']) && isset($_SERVER['argv'][2])){
         $argument = $_SERVER['argv'][2];
         $result = function_exists($command) ? $command($argument) : errorHandle("Нет такой функции");
     } elseif(function_exists($command)) {
@@ -24,6 +24,7 @@ function parseCommand(): string
             'read-all' => 'readAllPosts',
             'read-post' => 'readPost',
             'search-post' => 'searchPost',
+            'delete-post' => 'deletePost',
             'clear-posts' => 'clearPosts',
             default => 'handleHelp',
         };

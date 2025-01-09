@@ -14,6 +14,7 @@ add-post - создать новый пост
 read-all-posts - прочитать все посты
 read-post id - прочитать пост по айди
 search-post searchWorld - найти пост по поисковому слову
+delete-post id - удалить пост по айди
 clear-posts - удалить все посты
 HELP;
     return $help;

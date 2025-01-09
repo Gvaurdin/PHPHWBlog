@@ -52,7 +52,7 @@ function readAllPosts() : string
 
     $output = "Список постов:\n";
     foreach($dbData as $post) {
-        $output = "_ " . $post['title'] . " (ID: " . $post['id'] . ")\n";
+        $output .= "_ " . $post['title'] . " (ID: " . $post['id'] . ")\n";
     }
     return $output;
 }
@@ -104,6 +104,34 @@ function searchPost(string $search) : string
     }
 
     return $output;
+}
+
+function deletePost($id) : string
+{
+    $dbFile = __DIR__ . '/../db.txt';
+    if(!file_exists($dbFile)) {
+        return errorHandle("Базы постов не существует");
+    }
+
+    $dbData = json_decode(file_get_contents($dbFile), true);
+    if(empty($dbData)) {
+        return errorHandle("Нет доступных постов");
+    }
+
+    $dbData = json_decode(file_get_contents($dbFile), true);
+    $postFound = false;
+    foreach($dbData as $key => $post) {
+        if($post['id'] === $id) {
+            unset($dbData[$key]);
+            $postFound = true;
+            break;
+        }
+    }
+    if(!$postFound) {
+        return errorHandle("Пост с указанным id не найден");
+    }
+        file_put_contents($dbFile, json_encode($dbData, JSON_PRETTY_PRINT));
+        return "Пост успешно удален";
 }
 
 function clearPosts() : string
