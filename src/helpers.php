@@ -10,7 +10,11 @@ function handleHelp(): string
     $help = <<<HELP
 Доступные команды
 help - вывод данной подсказки
-add - создать новый пост
+add-post - создать новый пост
+read-all-posts - прочитать все посты
+read-post id - прочитать пост по айди
+search-post searchWorld - найти пост по поисковому слову
+clear-posts - удалить все посты
 HELP;
     return $help;
 

@@ -2,30 +2,117 @@
 
 function addPost() : string
 {
-    //TODO реализуйте добавление поста в хранилище db.txt
-    //Заголовок и тело поста считывайте тут же через readline
-    //Обработайте ошибки
-    //в случае успеха вернте текст что пост добавлен
-    //сохрнаять дату размещения поста
-    return "Пост добавлен";
+    //считываем заголовок
+    echo "Введите заголовок поста: ";
+    $title = trim(readline());
+
+    //проверка ввода заголовка
+    if(empty($title)) {
+        return errorHandle("Заголовок не может быть пуст");
+    }
+
+    //читаем тело поста
+    echo "Введите текст поста:\n";
+    $body = trim(readline());
+
+    if(empty($body)) {
+        return errorHandle("Текст поста не может быть пуст");
+    }
+
+    //формируем структура поста
+    $post = [
+      'id' => uniqid(),
+      'title' => $title,
+      'body' => $body,
+      'date' => date('Y-m-d H:i:s')
+    ];
+
+    //сохраняем пост в файл
+    $dbFile = __DIR__ . '/../db.txt';
+    $dbData = file_exists($dbFile) ? json_decode(file_get_contents($dbFile), true) : [];
+    $dbData[] = $post;
+
+    //пишем обратно в файл
+    file_put_contents($dbFile, json_encode($dbData, JSON_PRETTY_PRINT));
+
+    return "Пост успешно добавлен";
 }
 
 function readAllPosts() : string
 {
-    //TODO реализуйте чтение всех постов, но вывести только заголовки
+    $dbFile = __DIR__ . '/../db.txt';
+    if(!file_exists($dbFile)) {
+        return errorHandle("Базы постов не существует");
+    }
+
+    $dbData = json_decode(file_get_contents($dbFile), true);
+    if(empty($dbData)) {
+        return errorHandle("Нет доступных постов");
+    }
+
+    $output = "Список постов:\n";
+    foreach($dbData as $post) {
+        $output = "_ " . $post['title'] . " (ID: " . $post['id'] . ")\n";
+    }
+    return $output;
 }
 
 function readPost($id) : string
 {
-    //TODO реализуйте чтение одного поста, номер поста считывайте из командной строки
+    $dbFile = __DIR__ . '/../db.txt';
+    if(!file_exists($dbFile)) {
+        return errorHandle("Базы постов не существует");
+    }
+
+    $dbData = json_decode(file_get_contents($dbFile), true);
+    foreach($dbData as $post) {
+        if($post['id'] == $id) {
+            return "Заголовок: " . $post['title'] . "\n" .
+                "Дата: " . $post['date'] . "\n" .
+                "Текст: " . $post['body'];
+        }
+    }
+
+    return errorHandle("Пост с ID {$id} не найден");
 }
 
 function searchPost(string $search) : string
 {
-    //TODO* реализуйте поиск поста по заголовку (можно и по всему телу), поисковый запрос спрашивайте через readline
+    $dbFile = __DIR__ . '/../db.txt';
+    if(!file_exists($dbFile)) {
+        return errorHandle("Базы постов не существует");
+    }
+
+    $dbData = json_decode(file_get_contents($dbFile), true);
+    $results = [];
+
+    foreach($dbData as $post) {
+        if(stripos($post['title'], $search) !== false ||
+            stripos($post['body'], $search) !== false)
+        {
+            $results[] = $post;
+        }
+    }
+
+    if(empty($results)) {
+        return errorHandle("Ничего не найдено по запросу: {$search}");
+    }
+
+    $output = "Результаты поиска:\n";
+    foreach($results as $post) {
+        $output = "_ " . $post['title'] . " (ID: " . $post['id'] . ")\n";
+    }
+
+    return $output;
 }
 
-function clearPosts($id) : string
+function clearPosts() : string
 {
-    //TODO сотрите все посты
+    $dbFile = __DIR__ . '/../db.txt';
+    if(file_exists($dbFile)) {
+        file_put_contents($dbFile, json_encode([], JSON_PRETTY_PRINT));
+        return "Все посты успешно удалены";
+    }
+
+    return errorHandle("База постов уже пустая");
 }
