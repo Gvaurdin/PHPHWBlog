@@ -1,0 +1,12 @@
+services:
+  php:
+    build: ./docker/php
+    ports:
+      - 8000:80
+    volumes:
+      - ./:/var/www/html
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      PHP_IDE_CONFIG: "serverName=docker-apache"
+      XDEBUG_MODE: "off"  # Отключение Xdebug для CLI по умолчанию
