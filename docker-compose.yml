@@ -9,4 +9,5 @@ services:
       - "host.docker.internal:host-gateway"
     environment:
       PHP_IDE_CONFIG: "serverName=docker-apache"
-      XDEBUG_MODE: "off"  # Отключение Xdebug для CLI по умолчанию
+      XDEBUG_MODE: "debug"  # Включение отладки для CLI
+      XDEBUG_CONFIG: "client_host=host.docker.internal client_port=9003"

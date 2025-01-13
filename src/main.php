@@ -3,32 +3,28 @@
 function main(): string
 {
     $command = parseCommand();
-    if(in_array($command, ['readPost', 'searchPost','deletePost']) && isset($_SERVER['argv'][2])){
-        $argument = $_SERVER['argv'][2];
-        $result = function_exists($command) ? $command($argument) : errorHandle("Нет такой функции");
-    } elseif(function_exists($command)) {
+    $argument = $_SERVER['argv'][2] ?? null;
+
+    // проверяем, есть ли у фукнции аргументы
+    if(empty($argument)) {
         $result = $command();
     } else {
-        $result = errorHandle("Нет такой функции");
+        $result = $command($argument); // передаем аргументы как параметры
     }
-
     return $result;
 }
 
 function parseCommand(): string
 {
-    $functionName = 'handleHelp';
-    if(isset($_SERVER['argv'][1])) {
-        $functionName = match ($_SERVER['argv'][1]) {
-            'add-post' => 'addPost',
-            'read-all' => 'readAllPosts',
-            'read-post' => 'readPost',
-            'search-post' => 'searchPost',
-            'delete-post' => 'deletePost',
-            'clear-posts' => 'clearPosts',
-            default => 'handleHelp',
-        };
-    }
 
-    return $functionName;
+    return match ($_SERVER['argv'][1] ?? null) {
+        'add-post' => 'addPost',
+        'read-all' => 'readAllPosts',
+        'read-post' => 'readPost',
+        'search-post' => 'searchPost',
+        'delete-post' => 'deletePost',
+        'clear-posts' => 'clearPosts',
+        default => 'handleHelp'
+    };
+
 }

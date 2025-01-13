@@ -6,14 +6,16 @@
         }
     ],
     "require": {
-        "php": "^8.1",
+        "php": "^8.3",
       "ext-readline": "*"
     },
     "autoload": {
         "files": [
             "src/blog.php",
             "src/helpers.php",
-            "src/main.php"
+            "src/main.php",
+            "config/config.php",
+            "utils/utils.php"
         ]
     }
 }

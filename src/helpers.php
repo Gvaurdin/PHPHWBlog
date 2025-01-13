@@ -2,7 +2,7 @@
 
 function errorHandle(string $error) : string
 {
-    return "\033[31m" . $error . "\r\n \033[97m";
+    throw new InvalidArgumentException("\033[31m" . $error . "\r\n \033[97m");
 }
 
 function handleHelp(): string
